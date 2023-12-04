@@ -1,0 +1,1483 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hourly Weather | UniPG Weather Forecast</title>
+  <link rel="icon" href="../images/unipg-weather-forecast-icon.ico" type="image/x-icon">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@10..48,300&family=Roboto&display=swap" rel="stylesheet">
+  <link href="../styles/basic-elements-style.css" rel="stylesheet">
+  <link href="../styles/colors.css" rel="stylesheet">
+  <link href="../styles/header-style.css" rel="stylesheet">
+  <link href="../styles/hourly-weather-main-style.css" rel="stylesheet">
+  <link href="../styles/media-queries.css" rel="stylesheet">
+  <link href="../styles/footer-style.css" rel="stylesheet">
+  <script type="module" src="../scripts/constantsAndMultipurposeVariables.js"></script>
+  <script type="module" src="../scripts/parametersVariablesHourlyWeather.js"></script>
+  <script type="module" src="../scripts/settings.js"></script>
+  <script type="module" src="../scripts/view/viewTools.js"></script>
+  <script type="module" src="../scripts/controller/controllerTools.js"></script>
+  <script type="module" src="../scripts/view/hourlyWeatherDataEntry.js"></script>
+  <script type="module" src="../scripts/model/hourlyWeatherData.js"></script>
+  <script type="module" src="../scripts/view/searchBarView.js"></script>
+  <script type="module" src="../scripts/model/geocodingData.js"></script>
+  <script type="module" src="../scripts/controller/elementsEventListenersAndActions.js"></script>
+  <script type="module" src="../scripts/controller/documentAndWindowEventListenersAndActions.js"></script>
+  <script type="module" src="../scripts/controller/searchBarEventListenersAndActions.js"></script>
+  <script type="module" src="../scripts/hourlyWeatherMain.js"></script>
+</head>
+<body>
+  <header>
+    <div id="logos-container">
+      <img id="unipg-logo" src="../images/unipg-logo.svg" alt="unipg logo">
+      <img id="site-logo" src="../images/weather-forecast-logo.svg" alt="weather forecast logo">
+    </div>
+    <div id="current-weather-container">
+      <p id="current-weather-text"></p>
+      <img id="current-weather-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="weather condition image">
+    </div>
+    <div id="search-container">
+      <input type="text" id="search-input" placeholder="insert city">
+      <button id="search-button">
+        <img src="../images/search-img.svg" alt="Search icon">
+      </button>
+    </div>
+    <div id="search-suggestions-container">
+      <ul id="suggestions-list">
+      </ul>
+    </div>
+    <div id="settings-and-expand-icons-container">
+      <img id="settings-img" src="../images/gear.svg" alt="settings icon">
+      <img id="expand-img-hw" src="../images/expand-arrows.svg" alt="expand/reduce image">
+    </div>
+    <div id="settings-container">
+      <div>
+        <p id="language-text">Language: </p>
+        <img id="ita-flag" src="../images/flag-of-italy.svg" alt="italian language" data-lang="it">
+        <img id="uk-flag" src="../images/flag-of-uk.svg" alt="english language" data-lang="en">
+      </div>
+      <div>
+        <p>Temperature unit: </p>
+        <select id="temperature-unit-selection">
+          <option value="celsius">Celsius °C</option>
+          <option value="fahrenheit">Fahrenheit °F</option>
+        </select>
+      </div>
+      <div>
+        <p>Wind speed unit: </p>
+        <select id="wind-speed-unit-selection">
+          <option value="kmh">km/h</option>
+          <option value="ms">m/s</option>
+          <option value="mph">mph</option>
+          <option value="kn">kn</option>
+        </select>
+      </div>
+      <div>
+        <p>Precipitations unit: </p>
+        <select id="precipitations-unit-selection">
+          <option value="mm">mm</option>
+          <option value="inch">inch</option>
+        </select>
+      </div>
+      <button id="save-settings-button">Save</button>
+    </div>
+  </header>
+  <main id="hourly-weather-main">
+    <div id="main-container-hw">
+      <div id="date-and-timezone-container">
+        <div id="date-widget">
+          <button id="minus-button">-</button>
+          <p id="date-text"></p>
+          <button id="plus-button">+</button>
+        </div>
+        <p id="timezone-text"></p>
+      </div>
+      <table id="main-table-hw">
+        <tr id="header-row-hw">
+          <td id="empty-cell-header-row-hw" colspan="2"></td>
+          <td id="temp-cell-header-row-hw" colspan="2">
+            <img src="../images/med-temp-img.svg" alt="temperature image">
+          </td>
+          <td id="precipitations-cell-header-row-hw">
+            <img src="../images/precipitations-img.svg" alt="precipitations image">
+          </td>
+          <td id="wind-cell-header-row-hw">
+            <img src="../images/wind-img.svg" alt="wind image">
+          </td>
+          <td id="empty-cell-2-header-row-hw"></td>
+        </tr>
+        <tr class="main-info-row-hw">
+          <td class="hour-cell-hw">
+            <p></p>
+          </td>
+          <td class="weather-condition-cell-hw">
+            <div>
+              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="weather condition image">
+              <p></p>
+            </div>
+          </td>
+          <td class="temp-cell-hw">
+            <div>
+              <img src="../images/med-temp-img.svg" alt="temperature image">
+              <p></p>
+            </div>
+          </td>
+          <td class="app-temp-cell-hw">
+            <p></p>
+          </td>
+          <td class="precipitations-cell-hw">
+            <div>
+              <img src="../images/precipitations-img.svg" alt="precipitations image">
+              <p></p>
+            </div>
+          </td>
+          <td class="wind-cell-hw">
+            <div>
+              <img src="../images/wind-img.svg" alt="wind image">
+              <p></p>
+            </div>
+          </td>
+          <td class="more-info-cell-hw">
+            <img class="more-info-img-hw" src="../images/more-img.svg" alt="more info button image">
+          </td>
+        </tr>
+        <tr class="extra-info-row-hw">
+          <td class="humidity-cell-main-table-hw" colspan="2">
+            <div>
+              <img src="../images/humidity-img.svg" alt="humidity image">
+              <p></p>
+            </div>
+          </td>
+          <td class="pressure-cell-main-table-hw" colspan="2">
+            <div>
+              <img src="../images/pressure-img.svg" alt="pressure image">
+              <p></p>
+            </div>
+          </td>
+          <td class="wind-gusts-cell-main-table-hw" colspan="3">
+            <div>
+              <img src="../images/wind-gusts-img.svg" alt="maximum wind gusts image">
+              <p></p>
+            </div>
+          </td>
+        </tr>
+        <tr class="main-info-row-hw">
+          <td class="hour-cell-hw">
+            <p></p>
+          </td>
+          <td class="weather-condition-cell-hw">
+            <div>
+              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="weather condition image">
+              <p></p>
+            </div>
+          </td>
+          <td class="temp-cell-hw">
+            <div>
+              <img src="../images/med-temp-img.svg" alt="temperature image">
+              <p></p>
+            </div>
+          </td>
+          <td class="app-temp-cell-hw">
+            <p></p>
+          </td>
+          <td class="precipitations-cell-hw">
+            <div>
+              <img src="../images/precipitations-img.svg" alt="precipitations image">
+              <p></p>
+            </div>
+          </td>
+          <td class="wind-cell-hw">
+            <div>
+              <img src="../images/wind-img.svg" alt="wind image">
+              <p></p>
+            </div>
+          </td>
+          <td class="more-info-cell-hw">
+            <img class="more-info-img-hw" src="../images/more-img.svg" alt="more info button image">
+          </td>
+        </tr>
+        <tr class="extra-info-row-hw">
+          <td class="humidity-cell-main-table-hw" colspan="2">
+            <div>
+              <img src="../images/humidity-img.svg" alt="humidity image">
+              <p></p>
+            </div>
+          </td>
+          <td class="pressure-cell-main-table-hw" colspan="2">
+            <div>
+              <img src="../images/pressure-img.svg" alt="pressure image">
+              <p></p>
+            </div>
+          </td>
+          <td class="wind-gusts-cell-main-table-hw" colspan="3">
+            <div>
+              <img src="../images/wind-gusts-img.svg" alt="maximum wind gusts image">
+              <p></p>
+            </div>
+          </td>
+        </tr>
+        <tr class="main-info-row-hw">
+          <td class="hour-cell-hw">
+            <p></p>
+          </td>
+          <td class="weather-condition-cell-hw">
+            <div>
+              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="weather condition image">
+              <p></p>
+            </div>
+          </td>
+          <td class="temp-cell-hw">
+            <div>
+              <img src="../images/med-temp-img.svg" alt="temperature image">
+              <p></p>
+            </div>
+          </td>
+          <td class="app-temp-cell-hw">
+            <p></p>
+          </td>
+          <td class="precipitations-cell-hw">
+            <div>
+              <img src="../images/precipitations-img.svg" alt="precipitations image">
+              <p></p>
+            </div>
+          </td>
+          <td class="wind-cell-hw">
+            <div>
+              <img src="../images/wind-img.svg" alt="wind image">
+              <p></p>
+            </div>
+          </td>
+          <td class="more-info-cell-hw">
+            <img class="more-info-img-hw" src="../images/more-img.svg" alt="more info button image">
+          </td>
+        </tr>
+        <tr class="extra-info-row-hw">
+          <td class="humidity-cell-main-table-hw" colspan="2">
+            <div>
+              <img src="../images/humidity-img.svg" alt="humidity image">
+              <p></p>
+            </div>
+          </td>
+          <td class="pressure-cell-main-table-hw" colspan="2">
+            <div>
+              <img src="../images/pressure-img.svg" alt="pressure image">
+              <p></p>
+            </div>
+          </td>
+          <td class="wind-gusts-cell-main-table-hw" colspan="3">
+            <div>
+              <img src="../images/wind-gusts-img.svg" alt="maximum wind gusts image">
+              <p></p>
+            </div>
+          </td>
+        </tr>
+        <tr class="main-info-row-hw">
+          <td class="hour-cell-hw">
+            <p></p>
+          </td>
+          <td class="weather-condition-cell-hw">
+            <div>
+              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="weather condition image">
+              <p></p>
+            </div>
+          </td>
+          <td class="temp-cell-hw">
+            <div>
+              <img src="../images/med-temp-img.svg" alt="temperature image">
+              <p></p>
+            </div>
+          </td>
+          <td class="app-temp-cell-hw">
+            <p></p>
+          </td>
+          <td class="precipitations-cell-hw">
+            <div>
+              <img src="../images/precipitations-img.svg" alt="precipitations image">
+              <p></p>
+            </div>
+          </td>
+          <td class="wind-cell-hw">
+            <div>
+              <img src="../images/wind-img.svg" alt="wind image">
+              <p></p>
+            </div>
+          </td>
+          <td class="more-info-cell-hw">
+            <img class="more-info-img-hw" src="../images/more-img.svg" alt="more info button image">
+          </td>
+        </tr>
+        <tr class="extra-info-row-hw">
+          <td class="humidity-cell-main-table-hw" colspan="2">
+            <div>
+              <img src="../images/humidity-img.svg" alt="humidity image">
+              <p></p>
+            </div>
+          </td>
+          <td class="pressure-cell-main-table-hw" colspan="2">
+            <div>
+              <img src="../images/pressure-img.svg" alt="pressure image">
+              <p></p>
+            </div>
+          </td>
+          <td class="wind-gusts-cell-main-table-hw" colspan="3">
+            <div>
+              <img src="../images/wind-gusts-img.svg" alt="maximum wind gusts image">
+              <p></p>
+            </div>
+          </td>
+        </tr>
+        <tr class="main-info-row-hw">
+          <td class="hour-cell-hw">
+            <p></p>
+          </td>
+          <td class="weather-condition-cell-hw">
+            <div>
+              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="weather condition image">
+              <p></p>
+            </div>
+          </td>
+          <td class="temp-cell-hw">
+            <div>
+              <img src="../images/med-temp-img.svg" alt="temperature image">
+              <p></p>
+            </div>
+          </td>
+          <td class="app-temp-cell-hw">
+            <p></p>
+          </td>
+          <td class="precipitations-cell-hw">
+            <div>
+              <img src="../images/precipitations-img.svg" alt="precipitations image">
+              <p></p>
+            </div>
+          </td>
+          <td class="wind-cell-hw">
+            <div>
+              <img src="../images/wind-img.svg" alt="wind image">
+              <p></p>
+            </div>
+          </td>
+          <td class="more-info-cell-hw">
+            <img class="more-info-img-hw" src="../images/more-img.svg" alt="more info button image">
+          </td>
+        </tr>
+        <tr class="extra-info-row-hw">
+          <td class="humidity-cell-main-table-hw" colspan="2">
+            <div>
+              <img src="../images/humidity-img.svg" alt="humidity image">
+              <p></p>
+            </div>
+          </td>
+          <td class="pressure-cell-main-table-hw" colspan="2">
+            <div>
+              <img src="../images/pressure-img.svg" alt="pressure image">
+              <p></p>
+            </div>
+          </td>
+          <td class="wind-gusts-cell-main-table-hw" colspan="3">
+            <div>
+              <img src="../images/wind-gusts-img.svg" alt="maximum wind gusts image">
+              <p></p>
+            </div>
+          </td>
+        </tr>
+        <tr class="main-info-row-hw">
+          <td class="hour-cell-hw">
+            <p></p>
+          </td>
+          <td class="weather-condition-cell-hw">
+            <div>
+              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="weather condition image">
+              <p></p>
+            </div>
+          </td>
+          <td class="temp-cell-hw">
+            <div>
+              <img src="../images/med-temp-img.svg" alt="temperature image">
+              <p></p>
+            </div>
+          </td>
+          <td class="app-temp-cell-hw">
+            <p></p>
+          </td>
+          <td class="precipitations-cell-hw">
+            <div>
+              <img src="../images/precipitations-img.svg" alt="precipitations image">
+              <p></p>
+            </div>
+          </td>
+          <td class="wind-cell-hw">
+            <div>
+              <img src="../images/wind-img.svg" alt="wind image">
+              <p></p>
+            </div>
+          </td>
+          <td class="more-info-cell-hw">
+            <img class="more-info-img-hw" src="../images/more-img.svg" alt="more info button image">
+          </td>
+        </tr>
+        <tr class="extra-info-row-hw">
+          <td class="humidity-cell-main-table-hw" colspan="2">
+            <div>
+              <img src="../images/humidity-img.svg" alt="humidity image">
+              <p></p>
+            </div>
+          </td>
+          <td class="pressure-cell-main-table-hw" colspan="2">
+            <div>
+              <img src="../images/pressure-img.svg" alt="pressure image">
+              <p></p>
+            </div>
+          </td>
+          <td class="wind-gusts-cell-main-table-hw" colspan="3">
+            <div>
+              <img src="../images/wind-gusts-img.svg" alt="maximum wind gusts image">
+              <p></p>
+            </div>
+          </td>
+        </tr>
+        <tr class="main-info-row-hw">
+          <td class="hour-cell-hw">
+            <p></p>
+          </td>
+          <td class="weather-condition-cell-hw">
+            <div>
+              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="weather condition image">
+              <p></p>
+            </div>
+          </td>
+          <td class="temp-cell-hw">
+            <div>
+              <img src="../images/med-temp-img.svg" alt="temperature image">
+              <p></p>
+            </div>
+          </td>
+          <td class="app-temp-cell-hw">
+            <p></p>
+          </td>
+          <td class="precipitations-cell-hw">
+            <div>
+              <img src="../images/precipitations-img.svg" alt="precipitations image">
+              <p></p>
+            </div>
+          </td>
+          <td class="wind-cell-hw">
+            <div>
+              <img src="../images/wind-img.svg" alt="wind image">
+              <p></p>
+            </div>
+          </td>
+          <td class="more-info-cell-hw">
+            <img class="more-info-img-hw" src="../images/more-img.svg" alt="more info button image">
+          </td>
+        </tr>
+        <tr class="extra-info-row-hw">
+          <td class="humidity-cell-main-table-hw" colspan="2">
+            <div>
+              <img src="../images/humidity-img.svg" alt="humidity image">
+              <p></p>
+            </div>
+          </td>
+          <td class="pressure-cell-main-table-hw" colspan="2">
+            <div>
+              <img src="../images/pressure-img.svg" alt="pressure image">
+              <p></p>
+            </div>
+          </td>
+          <td class="wind-gusts-cell-main-table-hw" colspan="3">
+            <div>
+              <img src="../images/wind-gusts-img.svg" alt="maximum wind gusts image">
+              <p></p>
+            </div>
+          </td>
+        </tr>
+        <tr class="main-info-row-hw">
+          <td class="hour-cell-hw">
+            <p></p>
+          </td>
+          <td class="weather-condition-cell-hw">
+            <div>
+              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="weather condition image">
+              <p></p>
+            </div>
+          </td>
+          <td class="temp-cell-hw">
+            <div>
+              <img src="../images/med-temp-img.svg" alt="temperature image">
+              <p></p>
+            </div>
+          </td>
+          <td class="app-temp-cell-hw">
+            <p></p>
+          </td>
+          <td class="precipitations-cell-hw">
+            <div>
+              <img src="../images/precipitations-img.svg" alt="precipitations image">
+              <p></p>
+            </div>
+          </td>
+          <td class="wind-cell-hw">
+            <div>
+              <img src="../images/wind-img.svg" alt="wind image">
+              <p></p>
+            </div>
+          </td>
+          <td class="more-info-cell-hw">
+            <img class="more-info-img-hw" src="../images/more-img.svg" alt="more info button image">
+          </td>
+        </tr>
+        <tr class="extra-info-row-hw">
+          <td class="humidity-cell-main-table-hw" colspan="2">
+            <div>
+              <img src="../images/humidity-img.svg" alt="humidity image">
+              <p></p>
+            </div>
+          </td>
+          <td class="pressure-cell-main-table-hw" colspan="2">
+            <div>
+              <img src="../images/pressure-img.svg" alt="pressure image">
+              <p></p>
+            </div>
+          </td>
+          <td class="wind-gusts-cell-main-table-hw" colspan="3">
+            <div>
+              <img src="../images/wind-gusts-img.svg" alt="maximum wind gusts image">
+              <p></p>
+            </div>
+          </td>
+        </tr>
+        <tr class="main-info-row-hw">
+          <td class="hour-cell-hw">
+            <p></p>
+          </td>
+          <td class="weather-condition-cell-hw">
+            <div>
+              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="weather condition image">
+              <p></p>
+            </div>
+          </td>
+          <td class="temp-cell-hw">
+            <div>
+              <img src="../images/med-temp-img.svg" alt="temperature image">
+              <p></p>
+            </div>
+          </td>
+          <td class="app-temp-cell-hw">
+            <p></p>
+          </td>
+          <td class="precipitations-cell-hw">
+            <div>
+              <img src="../images/precipitations-img.svg" alt="precipitations image">
+              <p></p>
+            </div>
+          </td>
+          <td class="wind-cell-hw">
+            <div>
+              <img src="../images/wind-img.svg" alt="wind image">
+              <p></p>
+            </div>
+          </td>
+          <td class="more-info-cell-hw">
+            <img class="more-info-img-hw" src="../images/more-img.svg" alt="more info button image">
+          </td>
+        </tr>
+        <tr class="extra-info-row-hw">
+          <td class="humidity-cell-main-table-hw" colspan="2">
+            <div>
+              <img src="../images/humidity-img.svg" alt="humidity image">
+              <p></p>
+            </div>
+          </td>
+          <td class="pressure-cell-main-table-hw" colspan="2">
+            <div>
+              <img src="../images/pressure-img.svg" alt="pressure image">
+              <p></p>
+            </div>
+          </td>
+          <td class="wind-gusts-cell-main-table-hw" colspan="3">
+            <div>
+              <img src="../images/wind-gusts-img.svg" alt="maximum wind gusts image">
+              <p></p>
+            </div>
+          </td>
+        </tr>
+        <tr class="main-info-row-hw">
+          <td class="hour-cell-hw">
+            <p></p>
+          </td>
+          <td class="weather-condition-cell-hw">
+            <div>
+              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="weather condition image">
+              <p></p>
+            </div>
+          </td>
+          <td class="temp-cell-hw">
+            <div>
+              <img src="../images/med-temp-img.svg" alt="temperature image">
+              <p></p>
+            </div>
+          </td>
+          <td class="app-temp-cell-hw">
+            <p></p>
+          </td>
+          <td class="precipitations-cell-hw">
+            <div>
+              <img src="../images/precipitations-img.svg" alt="precipitations image">
+              <p></p>
+            </div>
+          </td>
+          <td class="wind-cell-hw">
+            <div>
+              <img src="../images/wind-img.svg" alt="wind image">
+              <p></p>
+            </div>
+          </td>
+          <td class="more-info-cell-hw">
+            <img class="more-info-img-hw" src="../images/more-img.svg" alt="more info button image">
+          </td>
+        </tr>
+        <tr class="extra-info-row-hw">
+          <td class="humidity-cell-main-table-hw" colspan="2">
+            <div>
+              <img src="../images/humidity-img.svg" alt="humidity image">
+              <p></p>
+            </div>
+          </td>
+          <td class="pressure-cell-main-table-hw" colspan="2">
+            <div>
+              <img src="../images/pressure-img.svg" alt="pressure image">
+              <p></p>
+            </div>
+          </td>
+          <td class="wind-gusts-cell-main-table-hw" colspan="3">
+            <div>
+              <img src="../images/wind-gusts-img.svg" alt="maximum wind gusts image">
+              <p></p>
+            </div>
+          </td>
+        </tr>
+        <tr class="main-info-row-hw">
+          <td class="hour-cell-hw">
+            <p></p>
+          </td>
+          <td class="weather-condition-cell-hw">
+            <div>
+              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="weather condition image">
+              <p></p>
+            </div>
+          </td>
+          <td class="temp-cell-hw">
+            <div>
+              <img src="../images/med-temp-img.svg" alt="temperature image">
+              <p></p>
+            </div>
+          </td>
+          <td class="app-temp-cell-hw">
+            <p></p>
+          </td>
+          <td class="precipitations-cell-hw">
+            <div>
+              <img src="../images/precipitations-img.svg" alt="precipitations image">
+              <p></p>
+            </div>
+          </td>
+          <td class="wind-cell-hw">
+            <div>
+              <img src="../images/wind-img.svg" alt="wind image">
+              <p></p>
+            </div>
+          </td>
+          <td class="more-info-cell-hw">
+            <img class="more-info-img-hw" src="../images/more-img.svg" alt="more info button image">
+          </td>
+        </tr>
+        <tr class="extra-info-row-hw">
+          <td class="humidity-cell-main-table-hw" colspan="2">
+            <div>
+              <img src="../images/humidity-img.svg" alt="humidity image">
+              <p></p>
+            </div>
+          </td>
+          <td class="pressure-cell-main-table-hw" colspan="2">
+            <div>
+              <img src="../images/pressure-img.svg" alt="pressure image">
+              <p></p>
+            </div>
+          </td>
+          <td class="wind-gusts-cell-main-table-hw" colspan="3">
+            <div>
+              <img src="../images/wind-gusts-img.svg" alt="maximum wind gusts image">
+              <p></p>
+            </div>
+          </td>
+        </tr>
+        <tr class="main-info-row-hw">
+          <td class="hour-cell-hw">
+            <p></p>
+          </td>
+          <td class="weather-condition-cell-hw">
+            <div>
+              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="weather condition image">
+              <p></p>
+            </div>
+          </td>
+          <td class="temp-cell-hw">
+            <div>
+              <img src="../images/med-temp-img.svg" alt="temperature image">
+              <p></p>
+            </div>
+          </td>
+          <td class="app-temp-cell-hw">
+            <p></p>
+          </td>
+          <td class="precipitations-cell-hw">
+            <div>
+              <img src="../images/precipitations-img.svg" alt="precipitations image">
+              <p></p>
+            </div>
+          </td>
+          <td class="wind-cell-hw">
+            <div>
+              <img src="../images/wind-img.svg" alt="wind image">
+              <p></p>
+            </div>
+          </td>
+          <td class="more-info-cell-hw">
+            <img class="more-info-img-hw" src="../images/more-img.svg" alt="more info button image">
+          </td>
+        </tr>
+        <tr class="extra-info-row-hw">
+          <td class="humidity-cell-main-table-hw" colspan="2">
+            <div>
+              <img src="../images/humidity-img.svg" alt="humidity image">
+              <p></p>
+            </div>
+          </td>
+          <td class="pressure-cell-main-table-hw" colspan="2">
+            <div>
+              <img src="../images/pressure-img.svg" alt="pressure image">
+              <p></p>
+            </div>
+          </td>
+          <td class="wind-gusts-cell-main-table-hw" colspan="3">
+            <div>
+              <img src="../images/wind-gusts-img.svg" alt="maximum wind gusts image">
+              <p></p>
+            </div>
+          </td>
+        </tr>
+        <tr class="main-info-row-hw">
+          <td class="hour-cell-hw">
+            <p></p>
+          </td>
+          <td class="weather-condition-cell-hw">
+            <div>
+              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="weather condition image">
+              <p></p>
+            </div>
+          </td>
+          <td class="temp-cell-hw">
+            <div>
+              <img src="../images/med-temp-img.svg" alt="temperature image">
+              <p></p>
+            </div>
+          </td>
+          <td class="app-temp-cell-hw">
+            <p></p>
+          </td>
+          <td class="precipitations-cell-hw">
+            <div>
+              <img src="../images/precipitations-img.svg" alt="precipitations image">
+              <p></p>
+            </div>
+          </td>
+          <td class="wind-cell-hw">
+            <div>
+              <img src="../images/wind-img.svg" alt="wind image">
+              <p></p>
+            </div>
+          </td>
+          <td class="more-info-cell-hw">
+            <img class="more-info-img-hw" src="../images/more-img.svg" alt="more info button image">
+          </td>
+        </tr>
+        <tr class="extra-info-row-hw">
+          <td class="humidity-cell-main-table-hw" colspan="2">
+            <div>
+              <img src="../images/humidity-img.svg" alt="humidity image">
+              <p></p>
+            </div>
+          </td>
+          <td class="pressure-cell-main-table-hw" colspan="2">
+            <div>
+              <img src="../images/pressure-img.svg" alt="pressure image">
+              <p></p>
+            </div>
+          </td>
+          <td class="wind-gusts-cell-main-table-hw" colspan="3">
+            <div>
+              <img src="../images/wind-gusts-img.svg" alt="maximum wind gusts image">
+              <p></p>
+            </div>
+          </td>
+        </tr>
+        <tr class="main-info-row-hw">
+          <td class="hour-cell-hw">
+            <p></p>
+          </td>
+          <td class="weather-condition-cell-hw">
+            <div>
+              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="weather condition image">
+              <p></p>
+            </div>
+          </td>
+          <td class="temp-cell-hw">
+            <div>
+              <img src="../images/med-temp-img.svg" alt="temperature image">
+              <p></p>
+            </div>
+          </td>
+          <td class="app-temp-cell-hw">
+            <p></p>
+          </td>
+          <td class="precipitations-cell-hw">
+            <div>
+              <img src="../images/precipitations-img.svg" alt="precipitations image">
+              <p></p>
+            </div>
+          </td>
+          <td class="wind-cell-hw">
+            <div>
+              <img src="../images/wind-img.svg" alt="wind image">
+              <p></p>
+            </div>
+          </td>
+          <td class="more-info-cell-hw">
+            <img class="more-info-img-hw" src="../images/more-img.svg" alt="more info button image">
+          </td>
+        </tr>
+        <tr class="extra-info-row-hw">
+          <td class="humidity-cell-main-table-hw" colspan="2">
+            <div>
+              <img src="../images/humidity-img.svg" alt="humidity image">
+              <p></p>
+            </div>
+          </td>
+          <td class="pressure-cell-main-table-hw" colspan="2">
+            <div>
+              <img src="../images/pressure-img.svg" alt="pressure image">
+              <p></p>
+            </div>
+          </td>
+          <td class="wind-gusts-cell-main-table-hw" colspan="3">
+            <div>
+              <img src="../images/wind-gusts-img.svg" alt="maximum wind gusts image">
+              <p></p>
+            </div>
+          </td>
+        </tr>
+        <tr class="main-info-row-hw">
+          <td class="hour-cell-hw">
+            <p></p>
+          </td>
+          <td class="weather-condition-cell-hw">
+            <div>
+              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="weather condition image">
+              <p></p>
+            </div>
+          </td>
+          <td class="temp-cell-hw">
+            <div>
+              <img src="../images/med-temp-img.svg" alt="temperature image">
+              <p></p>
+            </div>
+          </td>
+          <td class="app-temp-cell-hw">
+            <p></p>
+          </td>
+          <td class="precipitations-cell-hw">
+            <div>
+              <img src="../images/precipitations-img.svg" alt="precipitations image">
+              <p></p>
+            </div>
+          </td>
+          <td class="wind-cell-hw">
+            <div>
+              <img src="../images/wind-img.svg" alt="wind image">
+              <p></p>
+            </div>
+          </td>
+          <td class="more-info-cell-hw">
+            <img class="more-info-img-hw" src="../images/more-img.svg" alt="more info button image">
+          </td>
+        </tr>
+        <tr class="extra-info-row-hw">
+          <td class="humidity-cell-main-table-hw" colspan="2">
+            <div>
+              <img src="../images/humidity-img.svg" alt="humidity image">
+              <p></p>
+            </div>
+          </td>
+          <td class="pressure-cell-main-table-hw" colspan="2">
+            <div>
+              <img src="../images/pressure-img.svg" alt="pressure image">
+              <p></p>
+            </div>
+          </td>
+          <td class="wind-gusts-cell-main-table-hw" colspan="3">
+            <div>
+              <img src="../images/wind-gusts-img.svg" alt="maximum wind gusts image">
+              <p></p>
+            </div>
+          </td>
+        </tr>
+        <tr class="main-info-row-hw">
+          <td class="hour-cell-hw">
+            <p></p>
+          </td>
+          <td class="weather-condition-cell-hw">
+            <div>
+              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="weather condition image">
+              <p></p>
+            </div>
+          </td>
+          <td class="temp-cell-hw">
+            <div>
+              <img src="../images/med-temp-img.svg" alt="temperature image">
+              <p></p>
+            </div>
+          </td>
+          <td class="app-temp-cell-hw">
+            <p></p>
+          </td>
+          <td class="precipitations-cell-hw">
+            <div>
+              <img src="../images/precipitations-img.svg" alt="precipitations image">
+              <p></p>
+            </div>
+          </td>
+          <td class="wind-cell-hw">
+            <div>
+              <img src="../images/wind-img.svg" alt="wind image">
+              <p></p>
+            </div>
+          </td>
+          <td class="more-info-cell-hw">
+            <img class="more-info-img-hw" src="../images/more-img.svg" alt="more info button image">
+          </td>
+        </tr>
+        <tr class="extra-info-row-hw">
+          <td class="humidity-cell-main-table-hw" colspan="2">
+            <div>
+              <img src="../images/humidity-img.svg" alt="humidity image">
+              <p></p>
+            </div>
+          </td>
+          <td class="pressure-cell-main-table-hw" colspan="2">
+            <div>
+              <img src="../images/pressure-img.svg" alt="pressure image">
+              <p></p>
+            </div>
+          </td>
+          <td class="wind-gusts-cell-main-table-hw" colspan="3">
+            <div>
+              <img src="../images/wind-gusts-img.svg" alt="maximum wind gusts image">
+              <p></p>
+            </div>
+          </td>
+        </tr>
+        <tr class="main-info-row-hw">
+          <td class="hour-cell-hw">
+            <p></p>
+          </td>
+          <td class="weather-condition-cell-hw">
+            <div>
+              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="weather condition image">
+              <p></p>
+            </div>
+          </td>
+          <td class="temp-cell-hw">
+            <div>
+              <img src="../images/med-temp-img.svg" alt="temperature image">
+              <p></p>
+            </div>
+          </td>
+          <td class="app-temp-cell-hw">
+            <p></p>
+          </td>
+          <td class="precipitations-cell-hw">
+            <div>
+              <img src="../images/precipitations-img.svg" alt="precipitations image">
+              <p></p>
+            </div>
+          </td>
+          <td class="wind-cell-hw">
+            <div>
+              <img src="../images/wind-img.svg" alt="wind image">
+              <p></p>
+            </div>
+          </td>
+          <td class="more-info-cell-hw">
+            <img class="more-info-img-hw" src="../images/more-img.svg" alt="more info button image">
+          </td>
+        </tr>
+        <tr class="extra-info-row-hw">
+          <td class="humidity-cell-main-table-hw" colspan="2">
+            <div>
+              <img src="../images/humidity-img.svg" alt="humidity image">
+              <p></p>
+            </div>
+          </td>
+          <td class="pressure-cell-main-table-hw" colspan="2">
+            <div>
+              <img src="../images/pressure-img.svg" alt="pressure image">
+              <p></p>
+            </div>
+          </td>
+          <td class="wind-gusts-cell-main-table-hw" colspan="3">
+            <div>
+              <img src="../images/wind-gusts-img.svg" alt="maximum wind gusts image">
+              <p></p>
+            </div>
+          </td>
+        </tr>
+        <tr class="main-info-row-hw">
+          <td class="hour-cell-hw">
+            <p></p>
+          </td>
+          <td class="weather-condition-cell-hw">
+            <div>
+              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="weather condition image">
+              <p></p>
+            </div>
+          </td>
+          <td class="temp-cell-hw">
+            <div>
+              <img src="../images/med-temp-img.svg" alt="temperature image">
+              <p></p>
+            </div>
+          </td>
+          <td class="app-temp-cell-hw">
+            <p></p>
+          </td>
+          <td class="precipitations-cell-hw">
+            <div>
+              <img src="../images/precipitations-img.svg" alt="precipitations image">
+              <p></p>
+            </div>
+          </td>
+          <td class="wind-cell-hw">
+            <div>
+              <img src="../images/wind-img.svg" alt="wind image">
+              <p></p>
+            </div>
+          </td>
+          <td class="more-info-cell-hw">
+            <img class="more-info-img-hw" src="../images/more-img.svg" alt="more info button image">
+          </td>
+        </tr>
+        <tr class="extra-info-row-hw">
+          <td class="humidity-cell-main-table-hw" colspan="2">
+            <div>
+              <img src="../images/humidity-img.svg" alt="humidity image">
+              <p></p>
+            </div>
+          </td>
+          <td class="pressure-cell-main-table-hw" colspan="2">
+            <div>
+              <img src="../images/pressure-img.svg" alt="pressure image">
+              <p></p>
+            </div>
+          </td>
+          <td class="wind-gusts-cell-main-table-hw" colspan="3">
+            <div>
+              <img src="../images/wind-gusts-img.svg" alt="maximum wind gusts image">
+              <p></p>
+            </div>
+          </td>
+        </tr>
+        <tr class="main-info-row-hw">
+          <td class="hour-cell-hw">
+            <p></p>
+          </td>
+          <td class="weather-condition-cell-hw">
+            <div>
+              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="weather condition image">
+              <p></p>
+            </div>
+          </td>
+          <td class="temp-cell-hw">
+            <div>
+              <img src="../images/med-temp-img.svg" alt="temperature image">
+              <p></p>
+            </div>
+          </td>
+          <td class="app-temp-cell-hw">
+            <p></p>
+          </td>
+          <td class="precipitations-cell-hw">
+            <div>
+              <img src="../images/precipitations-img.svg" alt="precipitations image">
+              <p></p>
+            </div>
+          </td>
+          <td class="wind-cell-hw">
+            <div>
+              <img src="../images/wind-img.svg" alt="wind image">
+              <p></p>
+            </div>
+          </td>
+          <td class="more-info-cell-hw">
+            <img class="more-info-img-hw" src="../images/more-img.svg" alt="more info button image">
+          </td>
+        </tr>
+        <tr class="extra-info-row-hw">
+          <td class="humidity-cell-main-table-hw" colspan="2">
+            <div>
+              <img src="../images/humidity-img.svg" alt="humidity image">
+              <p></p>
+            </div>
+          </td>
+          <td class="pressure-cell-main-table-hw" colspan="2">
+            <div>
+              <img src="../images/pressure-img.svg" alt="pressure image">
+              <p></p>
+            </div>
+          </td>
+          <td class="wind-gusts-cell-main-table-hw" colspan="3">
+            <div>
+              <img src="../images/wind-gusts-img.svg" alt="maximum wind gusts image">
+              <p></p>
+            </div>
+          </td>
+        </tr>
+        <tr class="main-info-row-hw">
+          <td class="hour-cell-hw">
+            <p></p>
+          </td>
+          <td class="weather-condition-cell-hw">
+            <div>
+              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="weather condition image">
+              <p></p>
+            </div>
+          </td>
+          <td class="temp-cell-hw">
+            <div>
+              <img src="../images/med-temp-img.svg" alt="temperature image">
+              <p></p>
+            </div>
+          </td>
+          <td class="app-temp-cell-hw">
+            <p></p>
+          </td>
+          <td class="precipitations-cell-hw">
+            <div>
+              <img src="../images/precipitations-img.svg" alt="precipitations image">
+              <p></p>
+            </div>
+          </td>
+          <td class="wind-cell-hw">
+            <div>
+              <img src="../images/wind-img.svg" alt="wind image">
+              <p></p>
+            </div>
+          </td>
+          <td class="more-info-cell-hw">
+            <img class="more-info-img-hw" src="../images/more-img.svg" alt="more info button image">
+          </td>
+        </tr>
+        <tr class="extra-info-row-hw">
+          <td class="humidity-cell-main-table-hw" colspan="2">
+            <div>
+              <img src="../images/humidity-img.svg" alt="humidity image">
+              <p></p>
+            </div>
+          </td>
+          <td class="pressure-cell-main-table-hw" colspan="2">
+            <div>
+              <img src="../images/pressure-img.svg" alt="pressure image">
+              <p></p>
+            </div>
+          </td>
+          <td class="wind-gusts-cell-main-table-hw" colspan="3">
+            <div>
+              <img src="../images/wind-gusts-img.svg" alt="maximum wind gusts image">
+              <p></p>
+            </div>
+          </td>
+        </tr>
+        <tr class="main-info-row-hw">
+          <td class="hour-cell-hw">
+            <p></p>
+          </td>
+          <td class="weather-condition-cell-hw">
+            <div>
+              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="weather condition image">
+              <p></p>
+            </div>
+          </td>
+          <td class="temp-cell-hw">
+            <div>
+              <img src="../images/med-temp-img.svg" alt="temperature image">
+              <p></p>
+            </div>
+          </td>
+          <td class="app-temp-cell-hw">
+            <p></p>
+          </td>
+          <td class="precipitations-cell-hw">
+            <div>
+              <img src="../images/precipitations-img.svg" alt="precipitations image">
+              <p></p>
+            </div>
+          </td>
+          <td class="wind-cell-hw">
+            <div>
+              <img src="../images/wind-img.svg" alt="wind image">
+              <p></p>
+            </div>
+          </td>
+          <td class="more-info-cell-hw">
+            <img class="more-info-img-hw" src="../images/more-img.svg" alt="more info button image">
+          </td>
+        </tr>
+        <tr class="extra-info-row-hw">
+          <td class="humidity-cell-main-table-hw" colspan="2">
+            <div>
+              <img src="../images/humidity-img.svg" alt="humidity image">
+              <p></p>
+            </div>
+          </td>
+          <td class="pressure-cell-main-table-hw" colspan="2">
+            <div>
+              <img src="../images/pressure-img.svg" alt="pressure image">
+              <p></p>
+            </div>
+          </td>
+          <td class="wind-gusts-cell-main-table-hw" colspan="3">
+            <div>
+              <img src="../images/wind-gusts-img.svg" alt="maximum wind gusts image">
+              <p></p>
+            </div>
+          </td>
+        </tr>
+        <tr class="main-info-row-hw">
+          <td class="hour-cell-hw">
+            <p></p>
+          </td>
+          <td class="weather-condition-cell-hw">
+            <div>
+              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="weather condition image">
+              <p></p>
+            </div>
+          </td>
+          <td class="temp-cell-hw">
+            <div>
+              <img src="../images/med-temp-img.svg" alt="temperature image">
+              <p></p>
+            </div>
+          </td>
+          <td class="app-temp-cell-hw">
+            <p></p>
+          </td>
+          <td class="precipitations-cell-hw">
+            <div>
+              <img src="../images/precipitations-img.svg" alt="precipitations image">
+              <p></p>
+            </div>
+          </td>
+          <td class="wind-cell-hw">
+            <div>
+              <img src="../images/wind-img.svg" alt="wind image">
+              <p></p>
+            </div>
+          </td>
+          <td class="more-info-cell-hw">
+            <img class="more-info-img-hw" src="../images/more-img.svg" alt="more info button image">
+          </td>
+        </tr>
+        <tr class="extra-info-row-hw">
+          <td class="humidity-cell-main-table-hw" colspan="2">
+            <div>
+              <img src="../images/humidity-img.svg" alt="humidity image">
+              <p></p>
+            </div>
+          </td>
+          <td class="pressure-cell-main-table-hw" colspan="2">
+            <div>
+              <img src="../images/pressure-img.svg" alt="pressure image">
+              <p></p>
+            </div>
+          </td>
+          <td class="wind-gusts-cell-main-table-hw" colspan="3">
+            <div>
+              <img src="../images/wind-gusts-img.svg" alt="maximum wind gusts image">
+              <p></p>
+            </div>
+          </td>
+        </tr>
+        <tr class="main-info-row-hw">
+          <td class="hour-cell-hw">
+            <p></p>
+          </td>
+          <td class="weather-condition-cell-hw">
+            <div>
+              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="weather condition image">
+              <p></p>
+            </div>
+          </td>
+          <td class="temp-cell-hw">
+            <div>
+              <img src="../images/med-temp-img.svg" alt="temperature image">
+              <p></p>
+            </div>
+          </td>
+          <td class="app-temp-cell-hw">
+            <p></p>
+          </td>
+          <td class="precipitations-cell-hw">
+            <div>
+              <img src="../images/precipitations-img.svg" alt="precipitations image">
+              <p></p>
+            </div>
+          </td>
+          <td class="wind-cell-hw">
+            <div>
+              <img src="../images/wind-img.svg" alt="wind image">
+              <p></p>
+            </div>
+          </td>
+          <td class="more-info-cell-hw">
+            <img class="more-info-img-hw" src="../images/more-img.svg" alt="more info button image">
+          </td>
+        </tr>
+        <tr class="extra-info-row-hw">
+          <td class="humidity-cell-main-table-hw" colspan="2">
+            <div>
+              <img src="../images/humidity-img.svg" alt="humidity image">
+              <p></p>
+            </div>
+          </td>
+          <td class="pressure-cell-main-table-hw" colspan="2">
+            <div>
+              <img src="../images/pressure-img.svg" alt="pressure image">
+              <p></p>
+            </div>
+          </td>
+          <td class="wind-gusts-cell-main-table-hw" colspan="3">
+            <div>
+              <img src="../images/wind-gusts-img.svg" alt="maximum wind gusts image">
+              <p></p>
+            </div>
+          </td>
+        </tr>
+        <tr id="last-main-info-row-hw" class="main-info-row-hw">
+          <td class="hour-cell-hw">
+            <p></p>
+          </td>
+          <td class="weather-condition-cell-hw">
+            <div>
+              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="weather condition image">
+              <p></p>
+            </div>
+          </td>
+          <td class="temp-cell-hw">
+            <div>
+              <img src="../images/med-temp-img.svg" alt="temperature image">
+              <p></p>
+            </div>
+          </td>
+          <td class="app-temp-cell-hw">
+            <p></p>
+          </td>
+          <td class="precipitations-cell-hw">
+            <div>
+              <img src="../images/precipitations-img.svg" alt="precipitations image">
+              <p></p>
+            </div>
+          </td>
+          <td class="wind-cell-hw">
+            <div>
+              <img src="../images/wind-img.svg" alt="wind image">
+              <p></p>
+            </div>
+          </td>
+          <td class="more-info-cell-hw">
+            <img class="more-info-img-hw" src="../images/more-img.svg" alt="more info button image">
+          </td>
+        </tr>
+        <tr id="last-extra-info-row-hw" class="extra-info-row-hw">
+          <td class="humidity-cell-main-table-hw" colspan="2">
+            <div>
+              <img src="../images/humidity-img.svg" alt="humidity image">
+              <p></p>
+            </div>
+          </td>
+          <td class="pressure-cell-main-table-hw" colspan="2">
+            <div>
+              <img src="../images/pressure-img.svg" alt="pressure image">
+              <p></p>
+            </div>
+          </td>
+          <td class="wind-gusts-cell-main-table-hw" colspan="3">
+            <div>
+              <img src="../images/wind-gusts-img.svg" alt="maximum wind gusts image">
+              <p></p>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <aside>
+      <h2 id="extra-info-hour-hw">loading hour...</h2>
+      <table id="aside-table-hw">
+        <tr>
+          <td class="extra-info-name-and-image-aside-table-hw">
+            <div>
+              <p>Umidità Relativa</p>
+              <img src="../images/humidity-img.svg" alt="relative humidity image">
+            </div>
+          </td>
+          <td class="extra-info-data-aside-table-hw">
+            <p></p>
+          </td>
+        </tr>
+        <tr>
+          <td class="extra-info-name-and-image-aside-table-hw">
+            <div>
+              <p>Pressione</p>
+              <img src="../images/pressure-img.svg" alt="pressure image">
+            </div>
+          </td>
+          <td class="extra-info-data-aside-table-hw">
+            <p></p>
+          </td>
+        </tr>
+        <tr>
+          <td class="extra-info-name-and-image-aside-table-hw" id="wind-gusts-cell-aside-table">
+            <div>
+              <p>Raffiche di Vento Massime</p>
+              <img src="../images/wind-gusts-img.svg" alt="Maximum Wind Gusts image">
+            </div>
+          </td>
+          <td class="extra-info-data-aside-table-hw">
+            <p></p>
+          </td>
+        </tr>
+      </table>
+    </aside>
+  </main>
+  <footer id="footer">
+    <a href="https://www.unipg.it/" target="_blank">
+      <img src="../images/unipg-marchio.svg" alt="marchio UniPG">
+    </a>
+    <div>
+      <p>Weather data and geocoding services are provided by <a href="https://open-meteo.com/" target="_blank">open-meteo.com</a> APIs.
+        <br>HTML files have been validated with <a href="https://validator.w3.org/nu/?doc=https%3A%2F%2Fmozart.diei.unipg.it%2Fgrilli%2Fmeteo%2Fpages%2Fhourly-weather.html" target="_blank">validator.w3.org</a>.</p>
+      <p>Web application developed by Michele Mariotti with the supervision of Prof. Luca Grilli.</p>
+    </div>
+  </footer>
+</body>
+</html>

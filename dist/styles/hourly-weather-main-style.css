@@ -1,0 +1,218 @@
+#date-and-timezone-container{
+  display: flex;
+  height: 3rem;
+  margin-bottom: 5px;
+}
+
+#date-widget{
+  display: flex;
+  height: 3rem;
+  text-align: center;
+  align-items: center;
+  margin: 0; 
+}
+
+#date-text{
+  display: flex;
+  background-color: var(--date-text-color);
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  height: 3rem;
+  width: 135px;
+  font-size: 20px;
+  font-weight: bold;
+	border: 1px solid var(--borders-color);
+  border-left: none;
+  border-right: none;
+  padding: 10px;
+  white-space: nowrap;
+}
+
+#minus-button, #plus-button{
+  display: block;
+  height: 3rem;
+  width: 3rem;
+  background-color: var(--secondary-color);
+  border: 1px solid var(--borders-color);
+  text-align: center;
+  align-items: center;
+  color: var(--white-color);
+  font-size: 35px;
+  padding: 0px;
+}
+
+#minus-button:hover, #plus-button:hover{
+  cursor: pointer;
+  background-color: var(--suggestion-selected-color);
+}
+
+.disabled-button #minus-button:hover, .disabled-button #plus-button:hover{
+  background-color: gray;
+}
+
+#timezone-text{
+  align-self: end;
+  font-size: 10px;
+  margin-left: 10px;
+}
+
+#main-container-hw{
+  width: 100%;
+  float: left;
+  padding: 0.8rem;
+}
+
+aside{
+  display: none;
+}
+
+table{
+  width: 100%;
+  table-layout: fixed;
+  font-size: 0.85rem;
+  border-collapse: collapse;
+  border: none;
+  text-align: center;
+  visibility: hidden;
+}
+
+td{
+  border: none;
+}
+
+tr{
+  border-top: 0.125rem solid var(--borders-color);
+}
+
+#main-table-hw #header-row-hw{
+  height: 2.3rem;
+  text-align: center;
+  margin: 0 auto;
+}
+
+#empty-cell-header-row-hw{
+  width: 40%;
+}
+
+#empty-cell-2-header-row-hw{
+  width: 0%;
+}
+
+#temp-cell-header-row-hw{
+  width: 24%;
+}
+
+#precipitations-cell-header-row-hw, #wind-cell-header-row-hw{
+  width: 18%;
+}
+
+#main-table-hw #header-row-hw img{
+  display: block;
+  height: 1.5rem;
+  width: auto;
+  margin: 0 auto;
+}
+
+#main-table-hw #wind-cell-header-row-hw img{
+  width: 1.5rem;
+  height: auto;
+}
+
+#main-table-hw #header-row-hw{
+  height: 2.3rem;
+  text-align: center;
+  margin: 0 auto;
+}
+
+#main-table-hw #header-row-hw img{
+  display: block;
+  height: 1.5rem;
+  width: auto;
+  margin: 0 auto;
+}
+
+#main-table-hw #wind-cell-header-row-hw img{
+  width: 1.5rem;
+  height: auto;
+}
+
+#main-table-hw .main-info-row-hw{
+  height: 5.5rem;
+  width: auto;
+}
+
+#main-table-hw .extra-info-row-hw{
+  display: none;
+  font-size: 0.75rem;
+  height: 2rem;
+  border-top: none;
+}
+
+#last-main-info-row-hw{
+  border-bottom: 0.125rem solid var(--borders-color);
+}
+
+#last-extra-info-row-hw{
+  border-bottom: 0.125rem solid var(--borders-color);
+}
+
+table div{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hour-cell-hw{
+  width: 18%;
+}
+
+.weather-condition-cell-hw{
+  width: 22%;
+}
+
+.temp-cell-hw, .app-temp-cell-hw{
+  width: 12%;
+}
+
+.precipitations-cell-hw, .wind-cell-hw{
+  width: 18%;
+}
+
+.more-info-cell-hw{
+  width: 0%;
+}
+
+#main-table-hw .main-info-row-hw img{
+  display: none;
+}
+
+#main-table-hw .extra-info-row-hw img{
+  height: 1.5rem;
+  width: auto;
+  padding-right: 0.15rem;
+}
+
+#main-table-hw .wind-cell-hw img, #aside-table-hw #wind-gusts-cell-aside-table-hw img, 
+  #main-table-hw .wind-gusts-cell-main-table-hw img{
+    width: 1.5rem;
+    height: auto;
+}
+
+#main-table-hw .weather-condition-cell-hw img{
+  display: block;
+  width: 4rem;
+  height: auto;
+}
+
+.weather-condition-cell-hw p{
+  display: none;
+}
+
+.hour-cell-hw p, .temp-cell-hw{
+  font-weight: 600;
+}
+
+.main-info-row-hw:hover, .main-info-row-hw:hover + .extra-info-row-hw{
+  background-color: var(--row-hover-color);
+}

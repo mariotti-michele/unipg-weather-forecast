@@ -1,0 +1,19 @@
+footer{
+  display: flex;
+  width: 100%;
+  color: var(--black-color);
+  background-color: var(--white-color);
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  font-size: 12px;
+}
+
+footer img{
+  height: 4rem;
+  margin-right: 20px;
+}
+
+footer div{
+  display: grid;
+}

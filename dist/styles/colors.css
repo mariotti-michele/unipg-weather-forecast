@@ -1,0 +1,12 @@
+:root{
+  --main-color: #2C76BF;
+  --white-color: white;
+  --black-color: black;
+  --secondary-color: #27348B;
+  --date-text-color: #4178b0;
+  --placeholder-color: #97bfe7;
+  --suggestion-selected-color: #384bc7;
+  --row-hover-color: #2f80d0;
+  --borders-color: #1c4d7d;
+  --suggestions-borders-color: #050714;
+}

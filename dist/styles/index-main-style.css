@@ -1,0 +1,138 @@
+#main-container{
+  width: 100%;
+  float: left;
+  padding: 0.8rem;
+}
+
+aside{
+  display: none;
+}
+
+table{
+  width: 100%;
+  table-layout: fixed;
+  font-size: 0.85rem;
+  border-collapse: collapse;
+  border: none;
+  text-align: center;
+  visibility: hidden;
+}
+
+td{
+  border: none;
+}
+
+tr{
+  border-top: 0.125rem solid var(--borders-color);
+}
+
+#main-table #header-row{
+  height: 2.3rem;
+  text-align: center;
+  margin: 0 auto;
+}
+
+#empty-cell-header-row{
+  width: 44%;
+}
+
+#empty-cell-2-header-row{
+  width: 0%;
+}
+
+#max-temp-cell-header-row, #min-temp-cell-header-row{
+  width: 10%;
+}
+
+#precipitations-cell-header-row, #wind-cell-header-row{
+  width: 18%;
+}
+
+#main-table #header-row img{
+  display: block;
+  height: 1.5rem;
+  width: auto;
+  margin: 0 auto;
+}
+
+#main-table #wind-cell-header-row img{
+  width: 1.5rem;
+  height: auto;
+}
+
+#main-table .main-info-row{
+  height: 5.5rem;
+  width: auto;
+}
+
+#main-table .extra-info-row{
+  display: none;
+  font-size: 0.75rem;
+  height: 2rem;
+  border-top: none;
+}
+
+#last-main-info-row{
+  border-bottom: 0.125rem solid var(--borders-color);
+}
+
+#last-extra-info-row{
+  border-bottom: 0.125rem solid var(--borders-color);
+}
+
+table div{
+  display: flex;
+  justify-content: center; 
+  align-items: center; 
+}
+
+.date-cell, .weather-condition-cell{
+  width: 22%;
+}
+
+.max-temp-cell, .min-temp-cell{
+  width: 10%;
+}
+
+.precipitations-cell, .wind-cell{
+  width: 18%;
+}
+
+.more-info-cell{
+  width: 0%;
+}
+
+#main-table .main-info-row img{
+  display: none;
+}
+
+#main-table .extra-info-row img{
+  height: 1.5rem;
+  width: auto;
+  padding-right: 0.15rem;
+}
+
+#main-table .wind-cell img, #aside-table #wind-gusts-cell-aside-table img, 
+  #main-table .wind-gusts-cell-main-table img{
+    width: 1.5rem;
+    height: auto;
+}
+
+#main-table .weather-condition-cell img{
+  display: block;
+  width: 4rem;
+  height: auto;
+}
+
+.weather-condition-cell p{
+  display: none;
+}
+
+.main-info-row:hover, .main-info-row:hover + .extra-info-row{
+  background-color: var(--row-hover-color);
+  cursor: pointer;
+}
+
+.date-cell p, .max-temp-cell p, .min-temp-cell p{
+  font-weight: 600;
+}
