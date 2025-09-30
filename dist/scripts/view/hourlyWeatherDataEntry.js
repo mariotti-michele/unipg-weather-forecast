@@ -11,8 +11,15 @@ export let hourlyWeatherDataInserter = {
         let hourCells = document.getElementsByClassName("hour-cell-hw");
         for(let i = 0; i < hourCells.length; i++){
             let paragraphs = hourCells[i].getElementsByTagName("p");
-            let hour = this.hourlyWeatherData.hourly.time[i + 24*dayIndex].split("T")[1];
-            paragraphs[0].textContent = hour;
+            if(this.hourlyWeatherData.hourly.time[i + 24*dayIndex] == null 
+                || this.hourlyWeatherData.hourly.time[i + 24*dayIndex] == undefined){
+                    paragraphs[0].textContent = "-";
+                    console.warn("time not found for hour index " + (i + 24*dayIndex) + ", time: " + this.hourlyWeatherData.hourly.time[i + 24*dayIndex]);
+            }
+            else{
+                let hour = this.hourlyWeatherData.hourly.time[i + 24*dayIndex].split("T")[1];
+                paragraphs[0].textContent = hour;
+            }
         }
     },
 
@@ -21,20 +28,26 @@ export let hourlyWeatherDataInserter = {
         for(let i = 0; i < weatherConditionCells.length; i++){
             let paragraphs = weatherConditionCells[i].getElementsByTagName("p");
             let images = weatherConditionCells[i].getElementsByTagName("img");
-            paragraphs[0].textContent = WEATHER_DESCRIPTIONS[this.hourlyWeatherData.hourly.weathercode[i + 24*dayIndex]][localStorage.getItem("language")];
-            if(WEATHER_ICONS_WITH_SUN_AND_MOON.includes(this.hourlyWeatherData.hourly.weathercode[i + 24*dayIndex])){
-                if(i >= sunrise && i <= sunset){
-                    images[0].src = "../images/weather-conditions/w_" + this.hourlyWeatherData.hourly.weathercode[i + 24*dayIndex] + "d.svg";
-                }
-                else{
-                    images[0].src = "../images/weather-conditions/w_" + this.hourlyWeatherData.hourly.weathercode[i + 24*dayIndex] + "n.svg";
-                }
-            }
-            else if(this.hourlyWeatherData.hourly.weathercode[i + 24*dayIndex] == 45 || this.hourlyWeatherData.hourly.weathercode[i + 24*dayIndex] == 48){
-                images[0].src = "../images/weather-conditions/w_4.svg";
+            if(this.hourlyWeatherData.hourly.weathercode[i + 24*dayIndex] == null || this.hourlyWeatherData.hourly.weathercode[i + 24*dayIndex] == undefined){
+                paragraphs[0].textContent = "-";
+                console.warn("weather code not found for hour index " + (i + 24*dayIndex) + ", code: " + this.hourlyWeatherData.hourly.weathercode[i + 24*dayIndex]);
             }
             else{
-                images[0].src = "../images/weather-conditions/w_" + this.hourlyWeatherData.hourly.weathercode[i + 24*dayIndex] + ".svg";
+                paragraphs[0].textContent = WEATHER_DESCRIPTIONS[this.hourlyWeatherData.hourly.weathercode[i + 24*dayIndex]][localStorage.getItem("language")];
+                if(WEATHER_ICONS_WITH_SUN_AND_MOON.includes(this.hourlyWeatherData.hourly.weathercode[i + 24*dayIndex])){
+                    if(i >= sunrise && i <= sunset){
+                        images[0].src = "../images/weather-conditions/w_" + this.hourlyWeatherData.hourly.weathercode[i + 24*dayIndex] + "d.svg";
+                    }
+                    else{
+                        images[0].src = "../images/weather-conditions/w_" + this.hourlyWeatherData.hourly.weathercode[i + 24*dayIndex] + "n.svg";
+                    }
+                }
+                else if(this.hourlyWeatherData.hourly.weathercode[i + 24*dayIndex] == 45 || this.hourlyWeatherData.hourly.weathercode[i + 24*dayIndex] == 48){
+                    images[0].src = "../images/weather-conditions/w_4.svg";
+                }
+                else{
+                    images[0].src = "../images/weather-conditions/w_" + this.hourlyWeatherData.hourly.weathercode[i + 24*dayIndex] + ".svg";
+                }
             }
         }
     },
@@ -106,7 +119,15 @@ export let hourlyWeatherDataInserter = {
 
     fillAsideTable: function(hourIndex){
         let extraInfoHour = document.getElementById("extra-info-hour-hw");
-        let hour = this.hourlyWeatherData.hourly.time[hourIndex + 24*dayIndex].split("T")[1];
+        let hour;
+        if(this.hourlyWeatherData.hourly.time[hourIndex + 24*dayIndex] == null 
+            || this.hourlyWeatherData.hourly.time[hourIndex + 24*dayIndex] == undefined){
+                extraInfoHour.textContent = "Ora: -";
+                console.warn("time not found for hour index " + (hourIndex + 24*dayIndex) + ", time: " + this.hourlyWeatherData.hourly.time[hourIndex + 24*dayIndex]);
+        }
+        else{
+            hour = this.hourlyWeatherData.hourly.time[hourIndex + 24*dayIndex].split("T")[1];
+        }
         if(localStorage.getItem("language") == "en"){
             extraInfoHour.textContent = "Time: " + hour;
             let extraInfoNameAndImageCells = document.getElementsByClassName("extra-info-name-and-image-aside-table-hw");
@@ -121,15 +142,29 @@ export let hourlyWeatherDataInserter = {
         let extraInfoCells = document.getElementsByClassName("extra-info-data-aside-table-hw");
         for(let i = 0; i < extraInfoCells.length; i++){
             var paragraphs = extraInfoCells[i].getElementsByTagName("p");
-            if(i == 0){
-                paragraphs[0].textContent = this.hourlyWeatherData.hourly.relativehumidity_2m[hourIndex + 24*dayIndex] + "%";
+            if(this.hourlyWeatherData.hourly.relativehumidity_2m[hourIndex + 24*dayIndex] == null
+                || this.hourlyWeatherData.hourly.pressure_msl[hourIndex + 24*dayIndex] == null
+                || this.hourlyWeatherData.hourly.windgusts_10m[hourIndex + 24*dayIndex] == null
+                || this.hourlyWeatherData.hourly.relativehumidity_2m[hourIndex + 24*dayIndex] == undefined
+                || this.hourlyWeatherData.hourly.pressure_msl[hourIndex + 24*dayIndex] == undefined
+                || this.hourlyWeatherData.hourly.windgusts_10m[hourIndex + 24*dayIndex] == undefined){
+                    paragraphs[0].textContent = "-";
+                    console.warn("extra info data not found for hour index " + (hourIndex + 24*dayIndex) 
+                        + ", humidity: " + this.hourlyWeatherData.hourly.relativehumidity_2m[hourIndex + 24*dayIndex]
+                        + ", pressure: " + this.hourlyWeatherData.hourly.pressure_msl[hourIndex + 24*dayIndex]
+                        + ", wind gusts: " + this.hourlyWeatherData.hourly.windgusts_10m[hourIndex + 24*dayIndex]);
             }
-            else if(i == 1){
-                paragraphs[0].textContent = Math.round(this.hourlyWeatherData.hourly.pressure_msl[hourIndex + 24*dayIndex]) + " hPa";
-            }
-            else if(i == 2){
-                paragraphs[0].textContent = Math.round(this.hourlyWeatherData.hourly.windgusts_10m[hourIndex + 24*dayIndex]) 
-                    + " " + this.hourlyWeatherData.hourly_units.windgusts_10m;
+            else{
+                if(i == 0){
+                    paragraphs[0].textContent = this.hourlyWeatherData.hourly.relativehumidity_2m[hourIndex + 24*dayIndex] + "%";
+                }
+                else if(i == 1){
+                    paragraphs[0].textContent = Math.round(this.hourlyWeatherData.hourly.pressure_msl[hourIndex + 24*dayIndex]) + " hPa";
+                }
+                else if(i == 2){
+                    paragraphs[0].textContent = Math.round(this.hourlyWeatherData.hourly.windgusts_10m[hourIndex + 24*dayIndex]) 
+                        + " " + this.hourlyWeatherData.hourly_units.windgusts_10m;
+                }
             }
         }
     },
