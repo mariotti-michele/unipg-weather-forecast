@@ -30,15 +30,24 @@ export let dailyWeatherDataInserter = {
         for(let i = 0; i < weatherConditionCells.length; i++){
             let paragraphs = weatherConditionCells[i].getElementsByTagName("p");
             let images = weatherConditionCells[i].getElementsByTagName("img");
-            paragraphs[0].textContent = WEATHER_DESCRIPTIONS[this.dailyWeatherData.daily.weathercode[i]][localStorage.getItem("language")];
-            if(WEATHER_ICONS_WITH_SUN_AND_MOON.includes(this.dailyWeatherData.daily.weathercode[i])){
-                images[0].src = "images/weather-conditions/w_" + this.dailyWeatherData.daily.weathercode[i] + "d.svg";
-            }
-            else if(this.dailyWeatherData.daily.weathercode[i] == 45 || this.dailyWeatherData.daily.weathercode[i] == 48){
-                images[0].src = "images/weather-conditions/w_4.svg";
+            if(this.dailyWeatherData.daily.weathercode[i] == null || this.dailyWeatherData.daily.weathercode[i] == undefined){
+                    console.warn("weather code not found for day index " + i + ", code: " + this.dailyWeatherData.daily.weathercode[i]);
+                    if(i == weatherConditionCells.length - 1)
+                        document.getElementById("last-main-info-row").style.display = "none";
+                    else
+                        paragraphs[0].textContent = "-";
             }
             else{
-                images[0].src = "images/weather-conditions/w_" + this.dailyWeatherData.daily.weathercode[i] + ".svg";
+                paragraphs[0].textContent = WEATHER_DESCRIPTIONS[this.dailyWeatherData.daily.weathercode[i]][localStorage.getItem("language")];
+                if(WEATHER_ICONS_WITH_SUN_AND_MOON.includes(this.dailyWeatherData.daily.weathercode[i])){
+                    images[0].src = "images/weather-conditions/w_" + this.dailyWeatherData.daily.weathercode[i] + "d.svg";
+                }
+                else if(this.dailyWeatherData.daily.weathercode[i] == 45 || this.dailyWeatherData.daily.weathercode[i] == 48){
+                    images[0].src = "images/weather-conditions/w_4.svg";
+                }
+                else{
+                    images[0].src = "images/weather-conditions/w_" + this.dailyWeatherData.daily.weathercode[i] + ".svg";
+                }
             }
         }
     },
